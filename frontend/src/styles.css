@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --bg: #f4f8fb;
   --bg-2: #ecf4ee;
   --panel: rgba(255, 255, 255, 0.9);
@@ -651,3 +651,4 @@ pre {
     grid-template-columns: 1fr;
   }
 }
+

@@ -1,4 +1,4 @@
-const API_BASE_URL = window.API_BASE_URL || "http://localhost:8080";
+﻿const API_BASE_URL = window.API_BASE_URL || "http://localhost:8080";
 
 const venuesEl = document.getElementById("venues");
 const slotsEl = document.getElementById("slots");
@@ -79,12 +79,12 @@ function wireEvents() {
 
   refreshHealthButton.addEventListener("click", async () => {
     await refreshServiceHealth();
-    markSynced("Service health refreshed");
+    markSynced("Đã cập nhật sức khỏe dịch vụ");
   });
 
   refreshVenuesButton.addEventListener("click", async () => {
     await loadVenues({ preserveSelection: true });
-    markSynced("Venue list refreshed");
+    markSynced("Đã cập nhật danh sách sân");
   });
 
   runDemoButton.addEventListener("click", async () => {
@@ -106,7 +106,7 @@ function wireEvents() {
   slotDateInput.addEventListener("change", async () => {
     if (state.selectedVenueId) {
       await loadSlots(state.selectedVenueId, slotDateInput.value);
-      markSynced("Slot data updated");
+      markSynced("Đã cập nhật khung giờ");
     }
   });
 
@@ -127,17 +127,17 @@ function wireEvents() {
     event.preventDefault();
     const bookingId = bookingIdLookupInput.value.trim();
     if (!bookingId) {
-      showToast("Please enter booking ID", "error");
+      showToast("Vui lòng nhập mã booking", "error");
       return;
     }
 
     try {
       const response = await requestJson(`${API_BASE_URL}/api/bookings/${bookingId}`);
-      showResult("Booking loaded", response);
-      showToast("Booking details loaded", "success");
-      markSynced("Booking fetched");
+      showResult("Đã tải booking", response);
+      showToast("Đã tải chi tiết booking", "success");
+      markSynced("Đã lấy thông tin booking");
     } catch (error) {
-      showResult("Get booking failed", { error: error.message });
+      showResult("Lấy booking thất bại", { error: error.message });
       showToast(error.message, "error");
     }
   });
@@ -146,7 +146,7 @@ function wireEvents() {
     event.preventDefault();
     const bookingId = bookingIdCancelInput.value.trim();
     if (!bookingId) {
-      showToast("Please enter booking ID", "error");
+      showToast("Vui lòng nhập mã booking", "error");
       return;
     }
 
@@ -154,18 +154,18 @@ function wireEvents() {
       const response = await requestJson(`${API_BASE_URL}/api/bookings/${bookingId}`, {
         method: "DELETE",
         body: JSON.stringify({
-          reason: cancelReasonInput.value.trim() || "Cancelled from dashboard"
+          reason: cancelReasonInput.value.trim() || "Hủy từ bảng điều hành"
         })
       });
 
       state.latestBookingId = response.data.id;
       updateStats();
-      showResult("Booking cancelled", response);
+      showResult("Đã hủy booking", response);
       exampleResultEl.textContent = JSON.stringify(response, null, 2);
-      showToast("Booking cancelled", "success");
-      markSynced("Booking cancelled");
+      showToast("Đã hủy booking", "success");
+      markSynced("Đã hủy booking");
     } catch (error) {
-      showResult("Cancel booking failed", { error: error.message });
+      showResult("Hủy booking thất bại", { error: error.message });
       showToast(error.message, "error");
     }
   });
@@ -178,17 +178,17 @@ async function initialize() {
 }
 
 async function refreshDashboard({ preserveSelection = true } = {}) {
-  showToast("Refreshing dashboard...", "success");
+  showToast("Đang làm mới bảng điều hành...", "success");
   await Promise.all([
     loadVenues({ preserveSelection, autoSelectFirst: true }),
     refreshServiceHealth()
   ]);
   updateExamplePayload();
-  markSynced("Dashboard refreshed");
+  markSynced("Đã làm mới bảng điều hành");
 }
 
 async function loadVenues({ preserveSelection = true, autoSelectFirst = false } = {}) {
-  venuesEl.innerHTML = `<p class="hint">Loading venues...</p>`;
+  venuesEl.innerHTML = `<p class="hint">Đang tải danh sách sân...</p>`;
 
   try {
     const payload = await requestJson(`${API_BASE_URL}/api/venues`);
@@ -204,12 +204,12 @@ async function loadVenues({ preserveSelection = true, autoSelectFirst = false } 
     if (state.selectedVenueId) {
       const selectedVenue = state.venues.find((venue) => venue.id === state.selectedVenueId);
       selectedVenueText.textContent = selectedVenue
-        ? `Selected venue: ${selectedVenue.name} (${selectedVenue.sport})`
-        : "Select a venue card to load slot data.";
+        ? `Sân đã chọn: ${selectedVenue.name} (${selectedVenue.sport})`
+        : "Chọn thẻ sân để tải khung giờ.";
       updateSelectedVenueInfo(selectedVenue || null);
       await loadSlots(state.selectedVenueId, slotDateInput.value);
     } else {
-      selectedVenueText.textContent = "Select a venue card to load slot data.";
+      selectedVenueText.textContent = "Chọn thẻ sân để tải khung giờ.";
       updateSelectedVenueInfo(null);
       state.slots = [];
       renderSlots([]);
@@ -223,7 +223,7 @@ async function loadVenues({ preserveSelection = true, autoSelectFirst = false } 
 
 function renderVenues(venues) {
   if (!venues.length) {
-    venuesEl.innerHTML = `<p class="hint">No venues available.</p>`;
+    venuesEl.innerHTML = `<p class="hint">Chưa có sân nào.</p>`;
     updateStats();
     return;
   }
@@ -236,17 +236,17 @@ function renderVenues(venues) {
     card.innerHTML = `
       <h3>${escapeHtml(venue.name)}</h3>
       <p class="slot-meta">${escapeHtml(venue.location)}</p>
-      <p class="slot-meta"><strong>${escapeHtml(venue.sport)}</strong> | Capacity: ${venue.capacity}</p>
-      <button class="btn btn-primary" data-venue-id="${venue.id}">View Slots</button>
+      <p class="slot-meta"><strong>${escapeHtml(venue.sport)}</strong> | Sức chứa: ${venue.capacity}</p>
+      <button class="btn btn-primary" data-venue-id="${venue.id}">Xem Khung Giờ</button>
     `;
 
     card.querySelector("button").addEventListener("click", async () => {
       state.selectedVenueId = venue.id;
-      selectedVenueText.textContent = `Selected venue: ${venue.name} (${venue.sport})`;
+      selectedVenueText.textContent = `Sân đã chọn: ${venue.name} (${venue.sport})`;
       updateSelectedVenueInfo(venue);
       renderVenues(state.venues);
       await loadSlots(venue.id, slotDateInput.value);
-      markSynced("Venue selected");
+      markSynced("Đã chọn sân");
     });
 
     venuesEl.appendChild(card);
@@ -256,7 +256,7 @@ function renderVenues(venues) {
 }
 
 async function loadSlots(venueId, date) {
-  slotsEl.innerHTML = `<p class="hint">Loading slots...</p>`;
+  slotsEl.innerHTML = `<p class="hint">Đang tải khung giờ...</p>`;
   const query = date ? `?date=${encodeURIComponent(date)}` : "";
 
   try {
@@ -279,7 +279,7 @@ async function loadSlots(venueId, date) {
 
 function renderSlots(slots) {
   if (!slots.length) {
-    slotsEl.innerHTML = `<p class="hint">No slots for this date.</p>`;
+    slotsEl.innerHTML = `<p class="hint">Không có khung giờ cho ngày này.</p>`;
     updateStats();
     return;
   }
@@ -293,16 +293,16 @@ function renderSlots(slots) {
     card.className = `card${slot.id === state.selectedSlotId ? " selected" : ""}`;
     card.innerHTML = `
       <p class="slot-meta"><strong>${start.date}</strong> ${start.time} - ${end.time}</p>
-      <p class="slot-meta">Slot ID: <code>${slot.id}</code></p>
+      <p class="slot-meta">Mã khung giờ: <code>${slot.id}</code></p>
       <span class="chip ${slot.status}">${slot.status}</span>
-      <button class="btn btn-primary" ${slot.status !== "OPEN" ? "disabled" : ""}>Use This Slot</button>
+      <button class="btn btn-primary" ${slot.status !== "OPEN" ? "disabled" : ""}>Dùng Khung Giờ Này</button>
     `;
 
     card.querySelector("button").addEventListener("click", () => {
       applySelectedSlot(slot.id);
-      showResult("Slot selected", { slotId: slot.id, status: slot.status });
-      showToast("Slot selected", "success");
-      markSynced("Slot selected");
+      showResult("Đã chọn khung giờ", { slotId: slot.id, status: slot.status });
+      showToast("Đã chọn khung giờ", "success");
+      markSynced("Đã chọn khung giờ");
     });
 
     slotsEl.appendChild(card);
@@ -328,13 +328,13 @@ async function pickFirstOpenSlot() {
 
   const firstOpen = state.slots.find((slot) => slot.status === "OPEN");
   if (!firstOpen) {
-    showToast("No open slot found for current filter", "error");
+    showToast("Không tìm thấy khung giờ trống theo bộ lọc hiện tại", "error");
     return;
   }
 
   applySelectedSlot(firstOpen.id);
-  showResult("First open slot selected", { slotId: firstOpen.id });
-  showToast("First open slot selected", "success");
+  showResult("Đã chọn khung giờ trống đầu tiên", { slotId: firstOpen.id });
+  showToast("Đã chọn khung giờ trống đầu tiên", "success");
 }
 
 async function createBookingFromForm() {
@@ -345,7 +345,7 @@ async function createBookingFromForm() {
   };
 
   if (!payload.userId || !payload.slotId) {
-    showToast("User ID and Slot ID are required", "error");
+    showToast("Mã sinh viên và mã khung giờ là bắt buộc", "error");
     return;
   }
 
@@ -360,12 +360,12 @@ async function createBookingFromForm() {
     bookingIdCancelInput.value = response.data.id;
 
     updateStats();
-    showResult("Booking created", response);
+    showResult("Đã tạo booking", response);
     exampleResultEl.textContent = JSON.stringify(response, null, 2);
-    showToast("Booking created successfully", "success");
-    markSynced("Booking created");
+    showToast("Tạo booking thành công", "success");
+    markSynced("Đã tạo booking");
   } catch (error) {
-    showResult("Create booking failed", { error: error.message });
+    showResult("Tạo booking thất bại", { error: error.message });
     showToast(error.message, "error");
   }
 }
@@ -388,12 +388,12 @@ async function createSampleBooking() {
 async function cancelLatestBooking() {
   const bookingId = state.latestBookingId || bookingIdCancelInput.value.trim();
   if (!bookingId) {
-    showToast("No booking available to cancel", "error");
+    showToast("Không có booking nào để hủy", "error");
     return;
   }
 
   bookingIdCancelInput.value = bookingId;
-  cancelReasonInput.value = cancelReasonInput.value.trim() || "Demo cancellation";
+  cancelReasonInput.value = cancelReasonInput.value.trim() || "Hủy trong demo";
 
   try {
     const response = await requestJson(`${API_BASE_URL}/api/bookings/${bookingId}`, {
@@ -403,18 +403,18 @@ async function cancelLatestBooking() {
 
     state.latestBookingId = response.data.id;
     updateStats();
-    showResult("Latest booking cancelled", response);
+    showResult("Đã hủy booking gần nhất", response);
     exampleResultEl.textContent = JSON.stringify(response, null, 2);
-    showToast("Latest booking cancelled", "success");
-    markSynced("Booking cancelled");
+    showToast("Đã hủy booking gần nhất", "success");
+    markSynced("Đã hủy booking");
   } catch (error) {
-    showResult("Cancel booking failed", { error: error.message });
+    showResult("Hủy booking thất bại", { error: error.message });
     showToast(error.message, "error");
   }
 }
 
 async function runDemoFlow() {
-  showToast("Running full demo flow...", "success");
+  showToast("Đang chạy luồng demo đầy đủ...", "success");
   await refreshDashboard({ preserveSelection: false });
   await pickFirstOpenSlot();
   await createSampleBooking();
@@ -450,18 +450,18 @@ function renderServiceHealth() {
 function setStatusBadge(element, value) {
   if (value === true) {
     element.className = "status-badge online";
-    element.textContent = "ONLINE";
+    element.textContent = "HOẠT ĐỘNG";
     return;
   }
 
   if (value === false) {
     element.className = "status-badge offline";
-    element.textContent = "OFFLINE";
+    element.textContent = "NGỪNG";
     return;
   }
 
   element.className = "status-badge unknown";
-  element.textContent = "CHECKING";
+  element.textContent = "ĐANG KIỂM TRA";
 }
 
 function updateStats() {
@@ -483,7 +483,7 @@ function updateStats() {
 
 function updateSelectedVenueInfo(venue) {
   if (!venue) {
-    selectedVenueNameEl.textContent = "No venue selected";
+    selectedVenueNameEl.textContent = "Chưa chọn sân";
     selectedVenueLocationEl.textContent = "-";
     selectedVenueSportEl.textContent = "-";
     selectedVenueCapacityEl.textContent = "-";
@@ -500,7 +500,7 @@ function updateSelectedVenueInfo(venue) {
 
 function updateExamplePayload() {
   const payload = {
-    slotId: state.selectedSlotId || "<auto from selected slot>",
+    slotId: state.selectedSlotId || "<tự động từ khung giờ đã chọn>",
     userId: userIdInput.value.trim() || "sv-demo-001",
     status: statusSelect.value || "PENDING"
   };
@@ -538,7 +538,7 @@ function markSynced(context) {
     timeZone: DASHBOARD_TIMEZONE,
     hour12: false
   });
-  lastSyncEl.textContent = `Last sync (${context}): ${time}`;
+  lastSyncEl.textContent = `Lần đồng bộ (${context}): ${time}`;
 }
 
 function formatDateTime(value) {
@@ -581,7 +581,7 @@ async function requestJson(url, options = {}) {
 
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(payload.error || `Request failed with status ${response.status}`);
+    throw new Error(payload.error || `Yêu cầu thất bại với mã ${response.status}`);
   }
 
   return payload;

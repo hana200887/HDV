@@ -1,9 +1,9 @@
-<!doctype html>
-<html lang="en">
+﻿<!doctype html>
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CampusCourt Professional Dashboard</title>
+    <title>CampusCourt - Bảng Điều Hành Chuyên Nghiệp</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -18,102 +18,102 @@
     <main class="shell">
       <header class="hero panel">
         <div class="hero-copy">
-          <p class="hero-tag">CampusCourt Platform</p>
-          <h1>Professional Sports Booking Operations Dashboard</h1>
+          <p class="hero-tag">Nền tảng CampusCourt</p>
+          <h1>Bảng Điều Hành Vận Hành Đặt Sân Thể Thao</h1>
           <p>
-            A complete command center for venue visibility, slot availability, booking lifecycle, service health, and live demonstrations.
+            Trung tâm điều hành đầy đủ cho hiển thị sân, tình trạng khung giờ, vòng đời đặt sân, sức khỏe dịch vụ và demo trực tiếp.
           </p>
 
           <div class="hero-actions">
-            <button id="refreshAll" class="btn btn-primary">Refresh Dashboard</button>
-            <button id="runDemo" class="btn btn-accent">Run Demo Flow</button>
+            <button id="refreshAll" class="btn btn-primary">Làm Mới Toàn Bộ</button>
+            <button id="runDemo" class="btn btn-accent">Chạy Demo Nhanh</button>
           </div>
 
           <div class="hero-metrics">
             <article class="metric-card">
-              <span>Total Venues</span>
+              <span>Tổng Số Sân</span>
               <strong id="statVenueCount">0</strong>
             </article>
             <article class="metric-card">
-              <span>Open Slots</span>
+              <span>Khung Giờ Còn Trống</span>
               <strong id="statOpenSlots">0</strong>
             </article>
             <article class="metric-card">
-              <span>Loaded Slots</span>
+              <span>Tổng Khung Giờ Đang Tải</span>
               <strong id="statTotalSlots">0</strong>
             </article>
             <article class="metric-card">
-              <span>Healthy Services</span>
+              <span>Dịch Vụ Hoạt Động</span>
               <strong id="statHealthyServices">0/3</strong>
             </article>
             <article class="metric-card">
-              <span>Selected Venue</span>
+              <span>Sân Đang Chọn</span>
               <strong id="statSelectedVenue">-</strong>
             </article>
             <article class="metric-card">
-              <span>Last Booking</span>
+              <span>Mã Đặt Sân Gần Nhất</span>
               <strong id="statLastBooking">-</strong>
             </article>
           </div>
         </div>
 
         <figure class="hero-illustration">
-          <img src="./assets/hero-court.svg" alt="Illustration of sports operations dashboard" />
-          <figcaption>Centralized monitoring for venues, slots, and booking activities.</figcaption>
+          <img src="./assets/hero-court.svg" alt="Minh họa bảng điều hành vận hành sân thể thao" />
+          <figcaption>Theo dõi tập trung sân, khung giờ và hoạt động đặt sân.</figcaption>
         </figure>
       </header>
 
       <section class="panel">
         <div class="panel-head">
-          <h2>Operations Center</h2>
-          <p class="panel-note" id="lastSync">Last sync: -</p>
+          <h2>Trung Tâm Vận Hành</h2>
+          <p class="panel-note" id="lastSync">Lần đồng bộ gần nhất: -</p>
         </div>
 
         <div class="operations-grid">
           <article class="subpanel">
             <div class="subpanel-head">
-              <h3>Service Health</h3>
-              <button id="refreshHealth" class="btn btn-ghost">Check Now</button>
+              <h3>Sức Khỏe Dịch Vụ</h3>
+              <button id="refreshHealth" class="btn btn-ghost">Kiểm Tra Ngay</button>
             </div>
             <ul class="status-list">
               <li>
-                <span>Gateway API</span>
-                <span id="statusGateway" class="status-badge unknown">Checking...</span>
+                <span>API Gateway</span>
+                <span id="statusGateway" class="status-badge unknown">Đang kiểm tra...</span>
               </li>
               <li>
-                <span>Venue Service</span>
-                <span id="statusVenue" class="status-badge unknown">Checking...</span>
+                <span>Dịch vụ Sân</span>
+                <span id="statusVenue" class="status-badge unknown">Đang kiểm tra...</span>
               </li>
               <li>
-                <span>Booking Service</span>
-                <span id="statusBooking" class="status-badge unknown">Checking...</span>
+                <span>Dịch vụ Đặt sân</span>
+                <span id="statusBooking" class="status-badge unknown">Đang kiểm tra...</span>
               </li>
             </ul>
             <p class="small-text">
-              Timezone: <strong id="infoTimezone">Asia/Bangkok</strong><br />
-              Local time: <strong id="infoDateTime">-</strong>
+              Múi giờ: <strong id="infoTimezone">Asia/Bangkok</strong><br />
+              Thời gian hiện tại: <strong id="infoDateTime">-</strong>
             </p>
           </article>
 
           <article class="subpanel">
-            <h3>Selected Venue Insight</h3>
-            <p class="venue-name" id="selectedVenueName">No venue selected</p>
+            <h3>Thông Tin Sân Đang Chọn</h3>
+            <p class="venue-name" id="selectedVenueName">Chưa chọn sân</p>
             <div class="venue-facts">
-              <p><span>Location</span><strong id="selectedVenueLocation">-</strong></p>
-              <p><span>Sport</span><strong id="selectedVenueSport">-</strong></p>
-              <p><span>Capacity</span><strong id="selectedVenueCapacity">-</strong></p>
-              <p><span>Created At</span><strong id="selectedVenueCreated">-</strong></p>
+              <p><span>Vị trí</span><strong id="selectedVenueLocation">-</strong></p>
+              <p><span>Môn thể thao</span><strong id="selectedVenueSport">-</strong></p>
+              <p><span>Sức chứa</span><strong id="selectedVenueCapacity">-</strong></p>
+              <p><span>Ngày tạo</span><strong id="selectedVenueCreated">-</strong></p>
             </div>
           </article>
 
           <article class="subpanel">
-            <h3>API Reference</h3>
+            <h3>Tham Chiếu API</h3>
             <ul class="endpoint-list">
-              <li><code>GET /api/venues</code><span>List all venues</span></li>
-              <li><code>GET /api/venues/{venueId}/slots</code><span>Query slots by venue/date</span></li>
-              <li><code>POST /api/bookings</code><span>Create booking</span></li>
-              <li><code>GET /api/bookings/{bookingId}</code><span>Get booking details</span></li>
-              <li><code>DELETE /api/bookings/{bookingId}</code><span>Cancel booking</span></li>
+              <li><code>GET /api/venues</code><span>Lấy danh sách sân</span></li>
+              <li><code>GET /api/venues/{venueId}/slots</code><span>Lấy khung giờ theo sân/ngày</span></li>
+              <li><code>POST /api/bookings</code><span>Tạo yêu cầu đặt sân</span></li>
+              <li><code>GET /api/bookings/{bookingId}</code><span>Lấy chi tiết đặt sân</span></li>
+              <li><code>DELETE /api/bookings/{bookingId}</code><span>Hủy đặt sân</span></li>
             </ul>
           </article>
         </div>
@@ -121,32 +121,32 @@
 
       <section class="panel">
         <div class="panel-head">
-          <h2>Illustrated System Overview</h2>
-          <p class="panel-note">Visual explanation for presentation and report screenshots.</p>
+          <h2>Tổng Quan Hệ Thống Có Minh Họa</h2>
+          <p class="panel-note">Hình ảnh trực quan phục vụ báo cáo và thuyết trình.</p>
         </div>
 
         <div class="illustration-grid">
           <figure class="illustration-card">
-            <img src="./assets/illustration-venue.svg" alt="Venue and slot catalog illustration" />
+            <img src="./assets/illustration-venue.svg" alt="Minh họa danh mục sân và khung giờ" />
             <figcaption>
-              <h3>Venue Discovery</h3>
-              <p>Organized catalog with location, sport, and slot visibility for students and administrators.</p>
+              <h3>Khám Phá Sân</h3>
+              <p>Danh mục sân được tổ chức rõ theo vị trí, môn thể thao và khả năng trống khung giờ.</p>
             </figcaption>
           </figure>
 
           <figure class="illustration-card">
-            <img src="./assets/illustration-booking.svg" alt="Booking lifecycle illustration" />
+            <img src="./assets/illustration-booking.svg" alt="Minh họa vòng đời đặt sân" />
             <figcaption>
-              <h3>Booking Lifecycle</h3>
-              <p>Create, track, and cancel bookings while preserving event history and clear status transitions.</p>
+              <h3>Vòng Đời Đặt Sân</h3>
+              <p>Tạo, theo dõi, hủy đặt sân với lịch sử sự kiện đầy đủ và trạng thái rõ ràng.</p>
             </figcaption>
           </figure>
 
           <figure class="illustration-card">
-            <img src="./assets/illustration-status.svg" alt="Monitoring and status dashboard illustration" />
+            <img src="./assets/illustration-status.svg" alt="Minh họa giám sát trạng thái hệ thống" />
             <figcaption>
-              <h3>Monitoring</h3>
-              <p>Centralized service checks and activity insights to support smooth operations and demos.</p>
+              <h3>Giám Sát Trạng Thái</h3>
+              <p>Theo dõi sức khỏe dịch vụ và hoạt động vận hành để demo ổn định.</p>
             </figcaption>
           </figure>
         </div>
@@ -154,133 +154,133 @@
 
       <section class="panel quick-demo-panel">
         <div class="panel-head">
-          <h2>Quick Demo and Example Payload</h2>
+          <h2>Demo Nhanh Và Payload Mẫu</h2>
         </div>
 
         <div class="demo-grid">
           <article class="demo-card">
-            <h3>Step 1</h3>
-            <p>Auto-select first open slot from selected venue.</p>
-            <button id="demoPickSlot" class="btn btn-primary">Auto Pick Slot</button>
+            <h3>Bước 1</h3>
+            <p>Tự động chọn khung giờ trống đầu tiên của sân đang chọn.</p>
+            <button id="demoPickSlot" class="btn btn-primary">Tự Chọn Khung Giờ</button>
           </article>
           <article class="demo-card">
-            <h3>Step 2</h3>
-            <p>Create sample booking with realistic student ID.</p>
-            <button id="demoCreate" class="btn btn-primary">Create Sample Booking</button>
+            <h3>Bước 2</h3>
+            <p>Tạo booking mẫu với mã sinh viên thực tế.</p>
+            <button id="demoCreate" class="btn btn-primary">Tạo Booking Mẫu</button>
           </article>
           <article class="demo-card">
-            <h3>Step 3</h3>
-            <p>Cancel latest booking to show full lifecycle completion.</p>
-            <button id="demoCancel" class="btn btn-danger">Cancel Latest Booking</button>
+            <h3>Bước 3</h3>
+            <p>Hủy booking gần nhất để minh họa đủ vòng đời nghiệp vụ.</p>
+            <button id="demoCancel" class="btn btn-danger">Hủy Booking Gần Nhất</button>
           </article>
         </div>
 
         <div class="example-grid">
           <article>
-            <h4>Example Request</h4>
+            <h4>Request Mẫu</h4>
             <pre id="examplePayload">{
-  "slotId": "<auto from selected slot>",
+  "slotId": "<tự động từ khung giờ đã chọn>",
   "userId": "sv-demo-001",
   "status": "PENDING"
 }</pre>
           </article>
           <article>
-            <h4>Example Response</h4>
-            <pre id="exampleResult">Run "Create Sample Booking" to view live API response.</pre>
+            <h4>Response Mẫu</h4>
+            <pre id="exampleResult">Bấm "Tạo Booking Mẫu" để xem phản hồi API trực tiếp.</pre>
           </article>
         </div>
       </section>
 
       <section class="panel workflow-panel">
         <div class="panel-head">
-          <h2>Workflow Illustration</h2>
-          <p class="panel-note">Standard demo narrative for report and oral presentation.</p>
+          <h2>Quy Trình Minh Họa</h2>
+          <p class="panel-note">Kịch bản chuẩn để quay demo và trình bày trên lớp.</p>
         </div>
 
-        <img class="workflow-image" src="./assets/operation-flow.svg" alt="Booking workflow illustration" />
+        <img class="workflow-image" src="./assets/operation-flow.svg" alt="Minh họa quy trình đặt sân" />
 
         <ol class="workflow-list">
-          <li><strong>Select Venue:</strong> choose the most suitable court by sport and location.</li>
-          <li><strong>Pick Slot:</strong> view daily slot availability and select an open period.</li>
-          <li><strong>Create Booking:</strong> submit booking request with student ID and status.</li>
-          <li><strong>Track or Cancel:</strong> inspect booking details and cancel when schedules change.</li>
+          <li><strong>Chọn sân:</strong> chọn sân phù hợp theo môn thể thao và vị trí.</li>
+          <li><strong>Chọn khung giờ:</strong> xem lịch trống theo ngày và chọn khoảng thời gian phù hợp.</li>
+          <li><strong>Tạo booking:</strong> gửi yêu cầu đặt sân với mã sinh viên và trạng thái.</li>
+          <li><strong>Theo dõi hoặc hủy:</strong> xem chi tiết booking và hủy khi lịch thay đổi.</li>
         </ol>
       </section>
 
       <section class="workspace-grid">
         <section class="panel">
           <div class="panel-head">
-            <h2>1) Venue Catalog</h2>
-            <button id="refreshVenues" class="btn btn-primary">Reload Venues</button>
+            <h2>1) Danh Mục Sân</h2>
+            <button id="refreshVenues" class="btn btn-primary">Tải Lại Danh Sách Sân</button>
           </div>
           <div id="venues" class="card-grid"></div>
         </section>
 
         <section class="panel">
           <div class="panel-head">
-            <h2>2) Slot Inventory</h2>
+            <h2>2) Danh Sách Khung Giờ</h2>
             <label class="inline-label">
-              Date
+              Ngày
               <input type="date" id="slotDate" />
             </label>
           </div>
-          <p id="selectedVenueText" class="hint">Select a venue card to load slot data.</p>
+          <p id="selectedVenueText" class="hint">Chọn một thẻ sân để tải dữ liệu khung giờ.</p>
           <div id="slots" class="card-grid"></div>
         </section>
 
         <section class="panel split-panel">
           <div>
-            <h2>3) Create Booking</h2>
+            <h2>3) Tạo Booking</h2>
             <form id="bookingForm" class="form-grid">
               <label>
-                User ID
+                Mã sinh viên
                 <input id="userId" placeholder="sv123456" required />
               </label>
               <label>
-                Slot ID
-                <input id="slotId" placeholder="Use Auto Pick Slot or click a slot card" required />
+                Mã khung giờ
+                <input id="slotId" placeholder="Dùng nút tự chọn hoặc bấm vào thẻ khung giờ" required />
               </label>
               <label>
-                Status
+                Trạng thái
                 <select id="status">
-                  <option value="PENDING">PENDING</option>
-                  <option value="CONFIRMED">CONFIRMED</option>
+                  <option value="PENDING">Chờ xác nhận (PENDING)</option>
+                  <option value="CONFIRMED">Đã xác nhận (CONFIRMED)</option>
                 </select>
               </label>
-              <button type="submit" class="btn btn-accent">Create Booking</button>
+              <button type="submit" class="btn btn-accent">Tạo Booking</button>
             </form>
           </div>
 
           <div>
-            <h2>4) Track and Cancel</h2>
+            <h2>4) Theo Dõi Và Hủy</h2>
             <form id="fetchBookingForm" class="form-grid compact-form">
               <label>
-                Booking ID
-                <input id="bookingIdLookup" placeholder="Paste booking UUID" required />
+                Mã booking
+                <input id="bookingIdLookup" placeholder="Dán UUID booking" required />
               </label>
-              <button type="submit" class="btn btn-primary">Get Booking</button>
+              <button type="submit" class="btn btn-primary">Lấy Chi Tiết Booking</button>
             </form>
 
             <form id="cancelBookingForm" class="form-grid compact-form">
               <label>
-                Booking ID
-                <input id="bookingIdCancel" placeholder="Paste booking UUID" required />
+                Mã booking
+                <input id="bookingIdCancel" placeholder="Dán UUID booking" required />
               </label>
               <label>
-                Cancel Reason
-                <input id="cancelReason" placeholder="Change of schedule" />
+                Lý do hủy
+                <input id="cancelReason" placeholder="Thay đổi lịch học" />
               </label>
-              <button type="submit" class="btn btn-danger">Cancel Booking</button>
+              <button type="submit" class="btn btn-danger">Hủy Booking</button>
             </form>
           </div>
         </section>
 
         <section class="panel">
           <div class="panel-head">
-            <h2>Live API Result</h2>
-            <span id="resultLabel" class="result-label">No action yet</span>
+            <h2>Kết Quả API Trực Tiếp</h2>
+            <span id="resultLabel" class="result-label">Chưa có thao tác</span>
           </div>
-          <pre id="result">Ready.</pre>
+          <pre id="result">Sẵn sàng.</pre>
         </section>
       </section>
     </main>

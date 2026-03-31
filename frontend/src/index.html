@@ -3,99 +3,162 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CampusCourt</title>
+    <title>CampusCourt Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="bg-shape shape-a"></div>
-    <div class="bg-shape shape-b"></div>
-    <main class="layout">
+    <div class="noise-overlay"></div>
+    <main class="app-shell">
       <header class="hero">
-        <p class="badge">CampusCourt</p>
-        <h1>Sports Venue Booking for Students</h1>
-        <p class="subtitle">
-          Browse available venues, pick an open slot, and create or cancel your booking from one dashboard.
-        </p>
+        <div class="hero-copy">
+          <p class="kicker">CampusCourt</p>
+          <h1>Student Sports Booking Dashboard</h1>
+          <p>
+            Clean and fast booking flow: select venue, choose open slot, create booking, then track or cancel in one place.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <button id="refreshAll" class="btn btn-light">Refresh Dashboard</button>
+          <button id="runDemo" class="btn btn-highlight">Run Demo Flow</button>
+        </div>
+        <div class="hero-stats">
+          <article class="stat-card">
+            <span>Venues</span>
+            <strong id="statVenueCount">0</strong>
+          </article>
+          <article class="stat-card">
+            <span>Open Slots (Loaded Venue)</span>
+            <strong id="statOpenSlots">0</strong>
+          </article>
+          <article class="stat-card">
+            <span>Last Booking ID</span>
+            <strong id="statLastBooking">-</strong>
+          </article>
+        </div>
       </header>
 
-      <section class="panel">
+      <section class="panel quick-demo">
         <div class="panel-head">
-          <h2>1) Venues</h2>
-          <button id="refreshVenues">Refresh</button>
+          <h2>Quick Demo and Example</h2>
         </div>
-        <div id="venues" class="card-grid"></div>
-      </section>
-
-      <section class="panel">
-        <div class="panel-head">
-          <h2>2) Slots</h2>
-          <label>
-            Date
-            <input type="date" id="slotDate" />
-          </label>
+        <div class="demo-grid">
+          <article class="demo-card">
+            <h3>Step 1</h3>
+            <p>Auto pick the first available slot from selected venue.</p>
+            <button id="demoPickSlot" class="btn btn-secondary">Auto Pick Slot</button>
+          </article>
+          <article class="demo-card">
+            <h3>Step 2</h3>
+            <p>Create a sample booking with one click.</p>
+            <button id="demoCreate" class="btn btn-secondary">Create Sample Booking</button>
+          </article>
+          <article class="demo-card">
+            <h3>Step 3</h3>
+            <p>Cancel the latest booking to show full lifecycle.</p>
+            <button id="demoCancel" class="btn btn-danger">Cancel Latest Booking</button>
+          </article>
         </div>
-        <p id="selectedVenueText" class="muted">Choose a venue to view slots.</p>
-        <div id="slots" class="card-grid"></div>
-      </section>
-
-      <section class="panel two-cols">
-        <div>
-          <h2>3) Create Booking</h2>
-          <form id="bookingForm">
-            <label>
-              User ID
-              <input id="userId" placeholder="sv123456" required />
-            </label>
-            <label>
-              Slot ID
-              <input id="slotId" placeholder="Select a slot above or paste UUID" required />
-            </label>
-            <label>
-              Status
-              <select id="status">
-                <option value="PENDING">PENDING</option>
-                <option value="CONFIRMED">CONFIRMED</option>
-              </select>
-            </label>
-            <button type="submit">Create Booking</button>
-          </form>
-        </div>
-
-        <div>
-          <h2>4) Track / Cancel Booking</h2>
-          <form id="fetchBookingForm">
-            <label>
-              Booking ID
-              <input id="bookingIdLookup" placeholder="Paste booking UUID" required />
-            </label>
-            <button type="submit">Get Booking</button>
-          </form>
-          <form id="cancelBookingForm">
-            <label>
-              Booking ID
-              <input id="bookingIdCancel" placeholder="Paste booking UUID" required />
-            </label>
-            <label>
-              Cancel Reason
-              <input id="cancelReason" placeholder="Change of schedule" />
-            </label>
-            <button type="submit" class="danger">Cancel Booking</button>
-          </form>
+        <div class="example-grid">
+          <article>
+            <h4>Example Request</h4>
+            <pre id="examplePayload">{
+  "slotId": "<auto from selected slot>",
+  "userId": "sv-demo-001",
+  "status": "PENDING"
+}</pre>
+          </article>
+          <article>
+            <h4>Example Response</h4>
+            <pre id="exampleResult">Run "Create Sample Booking" to see live response.</pre>
+          </article>
         </div>
       </section>
 
-      <section class="panel">
-        <h2>Result</h2>
-        <pre id="result"></pre>
+      <section class="workspace-grid">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>1) Venues</h2>
+            <button id="refreshVenues" class="btn btn-secondary">Reload Venues</button>
+          </div>
+          <div id="venues" class="card-grid"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>2) Slots</h2>
+            <label class="inline-label">
+              Date
+              <input type="date" id="slotDate" />
+            </label>
+          </div>
+          <p id="selectedVenueText" class="hint">Select a venue card to view slots.</p>
+          <div id="slots" class="card-grid"></div>
+        </section>
+
+        <section class="panel split-panel">
+          <div>
+            <h2>3) Create Booking</h2>
+            <form id="bookingForm" class="form-grid">
+              <label>
+                User ID
+                <input id="userId" placeholder="sv123456" required />
+              </label>
+              <label>
+                Slot ID
+                <input id="slotId" placeholder="Use Auto Pick Slot or choose from list" required />
+              </label>
+              <label>
+                Status
+                <select id="status">
+                  <option value="PENDING">PENDING</option>
+                  <option value="CONFIRMED">CONFIRMED</option>
+                </select>
+              </label>
+              <button type="submit" class="btn btn-highlight">Create Booking</button>
+            </form>
+          </div>
+
+          <div>
+            <h2>4) Track and Cancel</h2>
+            <form id="fetchBookingForm" class="form-grid compact-form">
+              <label>
+                Booking ID
+                <input id="bookingIdLookup" placeholder="Paste booking UUID" required />
+              </label>
+              <button type="submit" class="btn btn-secondary">Get Booking</button>
+            </form>
+
+            <form id="cancelBookingForm" class="form-grid compact-form">
+              <label>
+                Booking ID
+                <input id="bookingIdCancel" placeholder="Paste booking UUID" required />
+              </label>
+              <label>
+                Cancel Reason
+                <input id="cancelReason" placeholder="Change of schedule" />
+              </label>
+              <button type="submit" class="btn btn-danger">Cancel Booking</button>
+            </form>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Live Result</h2>
+            <span id="resultLabel" class="result-label">No action yet</span>
+          </div>
+          <pre id="result">Ready.</pre>
+        </section>
       </section>
     </main>
 
+    <aside id="toast" class="toast" aria-live="polite"></aside>
     <script src="./app.js"></script>
   </body>
 </html>

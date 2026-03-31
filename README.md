@@ -171,3 +171,17 @@ Xem tài liệu học đầy đủ tại:
 - [docs/HOC_DU_AN_MICROSERVICES.md](docs/HOC_DU_AN_MICROSERVICES.md)
 
 Tài liệu này có phần nâng cao: sequence diagram, troubleshooting, checklist demo bảo vệ, roadmap nâng cấp.
+
+## 11) Postman collection (1-click demo)
+
+Repo đã có sẵn file Postman:
+
+- [postman/MiniFoodOrdering.postman_collection.json](postman/MiniFoodOrdering.postman_collection.json)
+- [postman/MiniFoodOrdering.local.postman_environment.json](postman/MiniFoodOrdering.local.postman_environment.json)
+
+Thứ tự chạy khuyên dùng trong Postman:
+
+1. `Auth -> Login Admin` (tự lưu `accessToken`)
+2. `Menu -> Create Menu Item (Admin)` (tự lưu `menuItemId`)
+3. `Orders -> Create Order` (tự lưu `orderId`)
+4. `Orders -> Get Order By Id`

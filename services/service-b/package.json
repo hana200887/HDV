@@ -1,0 +1,17 @@
+{
+  "name": "campuscourt-booking-service",
+  "version": "1.0.0",
+  "description": "Booking service for CampusCourt",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  }
+}

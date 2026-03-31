@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusCourt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-shape shape-a"></div>
+    <div class="bg-shape shape-b"></div>
+    <main class="layout">
+      <header class="hero">
+        <p class="badge">CampusCourt</p>
+        <h1>Sports Venue Booking for Students</h1>
+        <p class="subtitle">
+          Browse available venues, pick an open slot, and create or cancel your booking from one dashboard.
+        </p>
+      </header>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>1) Venues</h2>
+          <button id="refreshVenues">Refresh</button>
+        </div>
+        <div id="venues" class="card-grid"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>2) Slots</h2>
+          <label>
+            Date
+            <input type="date" id="slotDate" />
+          </label>
+        </div>
+        <p id="selectedVenueText" class="muted">Choose a venue to view slots.</p>
+        <div id="slots" class="card-grid"></div>
+      </section>
+
+      <section class="panel two-cols">
+        <div>
+          <h2>3) Create Booking</h2>
+          <form id="bookingForm">
+            <label>
+              User ID
+              <input id="userId" placeholder="sv123456" required />
+            </label>
+            <label>
+              Slot ID
+              <input id="slotId" placeholder="Select a slot above or paste UUID" required />
+            </label>
+            <label>
+              Status
+              <select id="status">
+                <option value="PENDING">PENDING</option>
+                <option value="CONFIRMED">CONFIRMED</option>
+              </select>
+            </label>
+            <button type="submit">Create Booking</button>
+          </form>
+        </div>
+
+        <div>
+          <h2>4) Track / Cancel Booking</h2>
+          <form id="fetchBookingForm">
+            <label>
+              Booking ID
+              <input id="bookingIdLookup" placeholder="Paste booking UUID" required />
+            </label>
+            <button type="submit">Get Booking</button>
+          </form>
+          <form id="cancelBookingForm">
+            <label>
+              Booking ID
+              <input id="bookingIdCancel" placeholder="Paste booking UUID" required />
+            </label>
+            <label>
+              Cancel Reason
+              <input id="cancelReason" placeholder="Change of schedule" />
+            </label>
+            <button type="submit" class="danger">Cancel Booking</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Result</h2>
+        <pre id="result"></pre>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

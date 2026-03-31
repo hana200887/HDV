@@ -1,248 +1,97 @@
 services:
-  consul:
-    image: hashicorp/consul:1.20
-    command: agent -server -bootstrap -ui -client=0.0.0.0
+  frontend:
+    build: ./frontend
     ports:
-      - "8500:8500"
-      - "8600:8600/udp"
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      TZ: Asia/Bangkok
+    depends_on:
+      - gateway
     networks:
-      - micro-net
+      - app-network
 
-  rabbitmq:
-    image: rabbitmq:3.13-management
+  gateway:
+    build: ./gateway
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "${GATEWAY_PORT:-8080}:8000"
+    environment:
+      PORT: 8000
+      SERVICE_A_URL: http://service-a:5000
+      SERVICE_B_URL: http://service-b:5000
+      TZ: Asia/Bangkok
+    depends_on:
+      - service-a
+      - service-b
     networks:
-      - micro-net
+      - app-network
 
-  redis:
-    image: redis:7-alpine
+  service-a:
+    build: ./services/service-a
     ports:
-      - "6379:6379"
+      - "${SERVICE_A_PORT:-5001}:5000"
+    environment:
+      PORT: 5000
+      DATABASE_URL: postgresql://${VENUE_DB_USER:-venue}:${VENUE_DB_PASSWORD:-venue}@venue-db:5432/${VENUE_DB_NAME:-venue_db}
+      TZ: Asia/Bangkok
+    depends_on:
+      venue-db:
+        condition: service_healthy
     networks:
-      - micro-net
+      - app-network
 
-  postgres-menu:
+  service-b:
+    build: ./services/service-b
+    ports:
+      - "${SERVICE_B_PORT:-5002}:5000"
+    environment:
+      PORT: 5000
+      DATABASE_URL: postgresql://${BOOKING_DB_USER:-booking}:${BOOKING_DB_PASSWORD:-booking}@booking-db:5432/${BOOKING_DB_NAME:-booking_db}
+      SERVICE_A_URL: http://service-a:5000
+      TZ: Asia/Bangkok
+    depends_on:
+      booking-db:
+        condition: service_healthy
+      service-a:
+        condition: service_started
+    networks:
+      - app-network
+
+  venue-db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: menu_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5433:5432"
+      POSTGRES_DB: ${VENUE_DB_NAME:-venue_db}
+      POSTGRES_USER: ${VENUE_DB_USER:-venue}
+      POSTGRES_PASSWORD: ${VENUE_DB_PASSWORD:-venue}
     volumes:
-      - pg-menu-data:/var/lib/postgresql/data
+      - venue-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${VENUE_DB_USER:-venue} -d ${VENUE_DB_NAME:-venue_db}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     networks:
-      - micro-net
+      - app-network
 
-  postgres-order:
+  booking-db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: order_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5434:5432"
+      POSTGRES_DB: ${BOOKING_DB_NAME:-booking_db}
+      POSTGRES_USER: ${BOOKING_DB_USER:-booking}
+      POSTGRES_PASSWORD: ${BOOKING_DB_PASSWORD:-booking}
     volumes:
-      - pg-order-data:/var/lib/postgresql/data
+      - booking-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${BOOKING_DB_USER:-booking} -d ${BOOKING_DB_NAME:-booking_db}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     networks:
-      - micro-net
-
-  zipkin:
-    image: openzipkin/zipkin:3.5
-    ports:
-      - "9411:9411"
-    networks:
-      - micro-net
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.3
-    environment:
-      discovery.type: single-node
-      xpack.security.enabled: "false"
-      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
-    ports:
-      - "9200:9200"
-    volumes:
-      - es-data:/usr/share/elasticsearch/data
-    networks:
-      - micro-net
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.14.3
-    environment:
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
-    depends_on:
-      - elasticsearch
-    ports:
-      - "5601:5601"
-    networks:
-      - micro-net
-
-  authservice:
-    build:
-      context: .
-      dockerfile: src/AuthService/Dockerfile
-    depends_on:
-      - consul
-      - zipkin
-      - elasticsearch
-    environment:
-      ASPNETCORE_URLS: http://+:8080
-      Serilog__ElasticUri: http://elasticsearch:9200
-      Jwt__Issuer: MiniFoodOrdering
-      Jwt__Audience: MiniFoodOrderingClient
-      Jwt__Key: super-secret-key-change-this
-      Consul__Address: http://consul:8500
-      ServiceDiscovery__ServiceName: auth-service
-      ServiceDiscovery__ServiceAddress: authservice
-      ServiceDiscovery__ServicePort: 8080
-      OpenTelemetry__ZipkinEndpoint: http://zipkin:9411/api/v2/spans
-    ports:
-      - "5001:8080"
-    networks:
-      - micro-net
-
-  menuservice:
-    build:
-      context: .
-      dockerfile: src/MenuService/Dockerfile
-    depends_on:
-      - consul
-      - redis
-      - postgres-menu
-      - zipkin
-      - elasticsearch
-    environment:
-      ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__Postgres: Host=postgres-menu;Port=5432;Database=menu_db;Username=postgres;Password=postgres
-      Redis__ConnectionString: redis:6379
-      Serilog__ElasticUri: http://elasticsearch:9200
-      Jwt__Issuer: MiniFoodOrdering
-      Jwt__Audience: MiniFoodOrderingClient
-      Jwt__Key: super-secret-key-change-this
-      Consul__Address: http://consul:8500
-      ServiceDiscovery__ServiceName: menu-service
-      ServiceDiscovery__ServiceAddress: menuservice
-      ServiceDiscovery__ServicePort: 8080
-      OpenTelemetry__ZipkinEndpoint: http://zipkin:9411/api/v2/spans
-    ports:
-      - "5002:8080"
-    networks:
-      - micro-net
-
-  orderservice:
-    build:
-      context: .
-      dockerfile: src/OrderService/Dockerfile
-    depends_on:
-      - consul
-      - rabbitmq
-      - postgres-order
-      - zipkin
-      - elasticsearch
-    environment:
-      ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__Postgres: Host=postgres-order;Port=5432;Database=order_db;Username=postgres;Password=postgres
-      RabbitMq__HostName: rabbitmq
-      RabbitMq__Port: 5672
-      RabbitMq__UserName: guest
-      RabbitMq__Password: guest
-      RabbitMq__ExchangeName: food-ordering.events
-      Serilog__ElasticUri: http://elasticsearch:9200
-      Jwt__Issuer: MiniFoodOrdering
-      Jwt__Audience: MiniFoodOrderingClient
-      Jwt__Key: super-secret-key-change-this
-      Consul__Address: http://consul:8500
-      ServiceDiscovery__ServiceName: order-service
-      ServiceDiscovery__ServiceAddress: orderservice
-      ServiceDiscovery__ServicePort: 8080
-      OpenTelemetry__ZipkinEndpoint: http://zipkin:9411/api/v2/spans
-    ports:
-      - "5003:8080"
-    networks:
-      - micro-net
-
-  paymentmockservice:
-    build:
-      context: .
-      dockerfile: src/PaymentMockService/Dockerfile
-    depends_on:
-      - consul
-      - rabbitmq
-      - zipkin
-      - elasticsearch
-    environment:
-      ASPNETCORE_URLS: http://+:8080
-      RabbitMq__HostName: rabbitmq
-      RabbitMq__Port: 5672
-      RabbitMq__UserName: guest
-      RabbitMq__Password: guest
-      RabbitMq__ExchangeName: food-ordering.events
-      Serilog__ElasticUri: http://elasticsearch:9200
-      Consul__Address: http://consul:8500
-      ServiceDiscovery__ServiceName: payment-service
-      ServiceDiscovery__ServiceAddress: paymentmockservice
-      ServiceDiscovery__ServicePort: 8080
-      OpenTelemetry__ZipkinEndpoint: http://zipkin:9411/api/v2/spans
-    ports:
-      - "5004:8080"
-    networks:
-      - micro-net
-
-  notificationservice:
-    build:
-      context: .
-      dockerfile: src/NotificationService/Dockerfile
-    depends_on:
-      - consul
-      - rabbitmq
-      - zipkin
-      - elasticsearch
-    environment:
-      ASPNETCORE_URLS: http://+:8080
-      RabbitMq__HostName: rabbitmq
-      RabbitMq__Port: 5672
-      RabbitMq__UserName: guest
-      RabbitMq__Password: guest
-      RabbitMq__ExchangeName: food-ordering.events
-      Serilog__ElasticUri: http://elasticsearch:9200
-      Consul__Address: http://consul:8500
-      ServiceDiscovery__ServiceName: notification-service
-      ServiceDiscovery__ServiceAddress: notificationservice
-      ServiceDiscovery__ServicePort: 8080
-      OpenTelemetry__ZipkinEndpoint: http://zipkin:9411/api/v2/spans
-    ports:
-      - "5005:8080"
-    networks:
-      - micro-net
-
-  apigateway:
-    build:
-      context: .
-      dockerfile: src/ApiGateway/Dockerfile
-    depends_on:
-      - consul
-      - authservice
-      - menuservice
-      - orderservice
-      - zipkin
-      - elasticsearch
-    environment:
-      ASPNETCORE_URLS: http://+:8080
-      Serilog__ElasticUri: http://elasticsearch:9200
-      OpenTelemetry__ZipkinEndpoint: http://zipkin:9411/api/v2/spans
-    ports:
-      - "5000:8080"
-    networks:
-      - micro-net
+      - app-network
 
 networks:
-  micro-net:
+  app-network:
     driver: bridge
 
 volumes:
-  pg-menu-data:
-  pg-order-data:
-  es-data:
+  venue-db-data:
+  booking-db-data:

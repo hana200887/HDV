@@ -1,0 +1,225 @@
+openapi: 3.0.3
+info:
+  title: CampusCourt Venue Service API
+  version: 1.0.0
+  description: Venue and slot management service.
+servers:
+  - url: http://localhost:5001
+paths:
+  /health:
+    get:
+      summary: Service health check
+      operationId: venueHealth
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /venues:
+    get:
+      summary: List all venues
+      operationId: listVenues
+      responses:
+        '200':
+          description: Venue list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Venue'
+    post:
+      summary: Create a venue (optional initial slots)
+      operationId: createVenue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VenueCreateRequest'
+      responses:
+        '201':
+          description: Venue created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/VenueWithSlots'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /venues/{venueId}/slots:
+    get:
+      summary: List slots of a venue
+      operationId: listVenueSlots
+      parameters:
+        - name: venueId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: Filter by date in YYYY-MM-DD.
+      responses:
+        '200':
+          description: Venue and slots
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      venue:
+                        $ref: '#/components/schemas/Venue'
+                      slots:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TimeSlot'
+        '404':
+          description: Venue not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /slots/{slotId}:
+    get:
+      summary: Get a slot by id (internal usage)
+      operationId: getSlotById
+      parameters:
+        - name: slotId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Slot found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TimeSlot'
+        '404':
+          description: Slot not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+    Venue:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        location:
+          type: string
+        sport:
+          type: string
+        capacity:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+    TimeSlot:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        venueId:
+          type: string
+          format: uuid
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [OPEN, BLOCKED]
+    SlotCreate:
+      type: object
+      required:
+        - startTime
+        - endTime
+      properties:
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [OPEN, BLOCKED]
+          default: OPEN
+    VenueCreateRequest:
+      type: object
+      required:
+        - name
+        - location
+        - sport
+        - capacity
+      properties:
+        name:
+          type: string
+          minLength: 3
+        location:
+          type: string
+          minLength: 3
+        sport:
+          type: string
+          enum: [BASKETBALL, FOOTBALL, BADMINTON, TENNIS, VOLLEYBALL, OTHER]
+        capacity:
+          type: integer
+          minimum: 1
+        slots:
+          type: array
+          items:
+            $ref: '#/components/schemas/SlotCreate'
+    VenueWithSlots:
+      allOf:
+        - $ref: '#/components/schemas/Venue'
+        - type: object
+          properties:
+            slots:
+              type: array
+              items:
+                $ref: '#/components/schemas/TimeSlot'

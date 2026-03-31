@@ -1,0 +1,14 @@
+{
+  "name": "campuscourt-gateway",
+  "version": "1.0.0",
+  "description": "API gateway for CampusCourt",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "http-proxy-middleware": "^3.0.3"
+  }
+}

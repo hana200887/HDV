@@ -8,7 +8,6 @@ const SERVICE_B_URL = process.env.SERVICE_B_URL || "http://service-b:5000";
 
 const app = express();
 app.use(cors());
-app.use(express.json());
 
 app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
@@ -19,8 +18,8 @@ app.use(
   createProxyMiddleware({
     target: SERVICE_A_URL,
     changeOrigin: true,
-    pathRewrite: {
-      "^/api/venues": "/venues"
+    pathRewrite: (path) => {
+      return path === "/" ? "/venues" : `/venues${path}`;
     },
     onError: (_error, _req, res) => {
       res.status(502).json({ error: "Unable to reach venue service" });
@@ -33,8 +32,8 @@ app.use(
   createProxyMiddleware({
     target: SERVICE_B_URL,
     changeOrigin: true,
-    pathRewrite: {
-      "^/api/bookings": "/bookings"
+    pathRewrite: (path) => {
+      return path === "/" ? "/bookings" : `/bookings${path}`;
     },
     onError: (_error, _req, res) => {
       res.status(502).json({ error: "Unable to reach booking service" });

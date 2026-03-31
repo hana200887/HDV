@@ -1,0 +1,30 @@
+<svg width="640" height="420" viewBox="0 0 640 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g2" x1="0" y1="0" x2="640" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE6CF"/>
+      <stop offset="1" stop-color="#FFF6E2"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="420" rx="24" fill="url(#g2)"/>
+  <rect x="80" y="42" width="480" height="340" rx="22" fill="#FFFFFF" fill-opacity="0.9" stroke="#D17A22" stroke-opacity="0.36" stroke-width="3"/>
+  <rect x="80" y="42" width="480" height="78" rx="22" fill="#D17A22" fill-opacity="0.9"/>
+  <circle cx="130" cy="82" r="10" fill="#FFE6CF"/>
+  <circle cx="160" cy="82" r="10" fill="#FFE6CF"/>
+  <circle cx="190" cy="82" r="10" fill="#FFE6CF"/>
+  <text x="230" y="89" fill="#FFF6E2" font-family="Arial, sans-serif" font-size="26" font-weight="700">Booking Lifecycle</text>
+  <rect x="120" y="146" width="400" height="54" rx="14" fill="#D17A22" fill-opacity="0.12"/>
+  <rect x="120" y="218" width="400" height="54" rx="14" fill="#D17A22" fill-opacity="0.12"/>
+  <rect x="120" y="290" width="400" height="54" rx="14" fill="#D17A22" fill-opacity="0.12"/>
+  <circle cx="150" cy="173" r="16" fill="#D17A22"/>
+  <circle cx="150" cy="245" r="16" fill="#D17A22"/>
+  <circle cx="150" cy="317" r="16" fill="#D17A22"/>
+  <path d="M145 172L150 177L158 167" stroke="#FFF6E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M145 244L150 249L158 239" stroke="#FFF6E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M145 316L150 321L158 311" stroke="#FFF6E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="184" y="163" width="140" height="20" rx="10" fill="#D17A22" fill-opacity="0.45"/>
+  <rect x="184" y="235" width="170" height="20" rx="10" fill="#D17A22" fill-opacity="0.45"/>
+  <rect x="184" y="307" width="150" height="20" rx="10" fill="#D17A22" fill-opacity="0.45"/>
+  <rect x="384" y="160" width="116" height="28" rx="14" fill="#2D936C"/>
+  <rect x="384" y="232" width="116" height="28" rx="14" fill="#1F6E8C"/>
+  <rect x="384" y="304" width="116" height="28" rx="14" fill="#C1121F"/>
+</svg>

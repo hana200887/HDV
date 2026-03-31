@@ -1,0 +1,13 @@
+<svg width="1100" height="320" viewBox="0 0 1100 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1100" height="320" rx="24" fill="#0F2E4E"/>
+  <path d="M120 160H980" stroke="#9BD4EE" stroke-opacity="0.35" stroke-width="4"/>
+  <circle cx="180" cy="160" r="28" fill="#1F6E8C"/>
+  <circle cx="410" cy="160" r="28" fill="#2D936C"/>
+  <circle cx="640" cy="160" r="28" fill="#D17A22"/>
+  <circle cx="870" cy="160" r="28" fill="#C1121F"/>
+  <text x="130" y="235" fill="#E8F6FF" font-family="Arial, sans-serif" font-size="22" font-weight="700">Select Venue</text>
+  <text x="360" y="235" fill="#E8F6FF" font-family="Arial, sans-serif" font-size="22" font-weight="700">Pick Slot</text>
+  <text x="575" y="235" fill="#E8F6FF" font-family="Arial, sans-serif" font-size="22" font-weight="700">Create Booking</text>
+  <text x="815" y="235" fill="#E8F6FF" font-family="Arial, sans-serif" font-size="22" font-weight="700">Track/Cancel</text>
+  <text x="120" y="85" fill="#CFEAFF" font-family="Arial, sans-serif" font-size="32" font-weight="700">CampusCourt Workflow Illustration</text>
+</svg>

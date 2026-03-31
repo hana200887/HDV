@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CampusCourt Dashboard</title>
+    <title>CampusCourt Professional Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,57 +13,168 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="noise-overlay"></div>
-    <main class="app-shell">
-      <header class="hero">
+    <div class="ambient-grid"></div>
+
+    <main class="shell">
+      <header class="hero panel">
         <div class="hero-copy">
-          <p class="kicker">CampusCourt</p>
-          <h1>Student Sports Booking Dashboard</h1>
+          <p class="hero-tag">CampusCourt Platform</p>
+          <h1>Professional Sports Booking Operations Dashboard</h1>
           <p>
-            Clean and fast booking flow: select venue, choose open slot, create booking, then track or cancel in one place.
+            A complete command center for venue visibility, slot availability, booking lifecycle, service health, and live demonstrations.
           </p>
+
+          <div class="hero-actions">
+            <button id="refreshAll" class="btn btn-primary">Refresh Dashboard</button>
+            <button id="runDemo" class="btn btn-accent">Run Demo Flow</button>
+          </div>
+
+          <div class="hero-metrics">
+            <article class="metric-card">
+              <span>Total Venues</span>
+              <strong id="statVenueCount">0</strong>
+            </article>
+            <article class="metric-card">
+              <span>Open Slots</span>
+              <strong id="statOpenSlots">0</strong>
+            </article>
+            <article class="metric-card">
+              <span>Loaded Slots</span>
+              <strong id="statTotalSlots">0</strong>
+            </article>
+            <article class="metric-card">
+              <span>Healthy Services</span>
+              <strong id="statHealthyServices">0/3</strong>
+            </article>
+            <article class="metric-card">
+              <span>Selected Venue</span>
+              <strong id="statSelectedVenue">-</strong>
+            </article>
+            <article class="metric-card">
+              <span>Last Booking</span>
+              <strong id="statLastBooking">-</strong>
+            </article>
+          </div>
         </div>
-        <div class="hero-actions">
-          <button id="refreshAll" class="btn btn-light">Refresh Dashboard</button>
-          <button id="runDemo" class="btn btn-highlight">Run Demo Flow</button>
-        </div>
-        <div class="hero-stats">
-          <article class="stat-card">
-            <span>Venues</span>
-            <strong id="statVenueCount">0</strong>
-          </article>
-          <article class="stat-card">
-            <span>Open Slots (Loaded Venue)</span>
-            <strong id="statOpenSlots">0</strong>
-          </article>
-          <article class="stat-card">
-            <span>Last Booking ID</span>
-            <strong id="statLastBooking">-</strong>
-          </article>
-        </div>
+
+        <figure class="hero-illustration">
+          <img src="./assets/hero-court.svg" alt="Illustration of sports operations dashboard" />
+          <figcaption>Centralized monitoring for venues, slots, and booking activities.</figcaption>
+        </figure>
       </header>
 
-      <section class="panel quick-demo">
+      <section class="panel">
         <div class="panel-head">
-          <h2>Quick Demo and Example</h2>
+          <h2>Operations Center</h2>
+          <p class="panel-note" id="lastSync">Last sync: -</p>
         </div>
+
+        <div class="operations-grid">
+          <article class="subpanel">
+            <div class="subpanel-head">
+              <h3>Service Health</h3>
+              <button id="refreshHealth" class="btn btn-ghost">Check Now</button>
+            </div>
+            <ul class="status-list">
+              <li>
+                <span>Gateway API</span>
+                <span id="statusGateway" class="status-badge unknown">Checking...</span>
+              </li>
+              <li>
+                <span>Venue Service</span>
+                <span id="statusVenue" class="status-badge unknown">Checking...</span>
+              </li>
+              <li>
+                <span>Booking Service</span>
+                <span id="statusBooking" class="status-badge unknown">Checking...</span>
+              </li>
+            </ul>
+            <p class="small-text">
+              Timezone: <strong id="infoTimezone">Asia/Bangkok</strong><br />
+              Local time: <strong id="infoDateTime">-</strong>
+            </p>
+          </article>
+
+          <article class="subpanel">
+            <h3>Selected Venue Insight</h3>
+            <p class="venue-name" id="selectedVenueName">No venue selected</p>
+            <div class="venue-facts">
+              <p><span>Location</span><strong id="selectedVenueLocation">-</strong></p>
+              <p><span>Sport</span><strong id="selectedVenueSport">-</strong></p>
+              <p><span>Capacity</span><strong id="selectedVenueCapacity">-</strong></p>
+              <p><span>Created At</span><strong id="selectedVenueCreated">-</strong></p>
+            </div>
+          </article>
+
+          <article class="subpanel">
+            <h3>API Reference</h3>
+            <ul class="endpoint-list">
+              <li><code>GET /api/venues</code><span>List all venues</span></li>
+              <li><code>GET /api/venues/{venueId}/slots</code><span>Query slots by venue/date</span></li>
+              <li><code>POST /api/bookings</code><span>Create booking</span></li>
+              <li><code>GET /api/bookings/{bookingId}</code><span>Get booking details</span></li>
+              <li><code>DELETE /api/bookings/{bookingId}</code><span>Cancel booking</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Illustrated System Overview</h2>
+          <p class="panel-note">Visual explanation for presentation and report screenshots.</p>
+        </div>
+
+        <div class="illustration-grid">
+          <figure class="illustration-card">
+            <img src="./assets/illustration-venue.svg" alt="Venue and slot catalog illustration" />
+            <figcaption>
+              <h3>Venue Discovery</h3>
+              <p>Organized catalog with location, sport, and slot visibility for students and administrators.</p>
+            </figcaption>
+          </figure>
+
+          <figure class="illustration-card">
+            <img src="./assets/illustration-booking.svg" alt="Booking lifecycle illustration" />
+            <figcaption>
+              <h3>Booking Lifecycle</h3>
+              <p>Create, track, and cancel bookings while preserving event history and clear status transitions.</p>
+            </figcaption>
+          </figure>
+
+          <figure class="illustration-card">
+            <img src="./assets/illustration-status.svg" alt="Monitoring and status dashboard illustration" />
+            <figcaption>
+              <h3>Monitoring</h3>
+              <p>Centralized service checks and activity insights to support smooth operations and demos.</p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="panel quick-demo-panel">
+        <div class="panel-head">
+          <h2>Quick Demo and Example Payload</h2>
+        </div>
+
         <div class="demo-grid">
           <article class="demo-card">
             <h3>Step 1</h3>
-            <p>Auto pick the first available slot from selected venue.</p>
-            <button id="demoPickSlot" class="btn btn-secondary">Auto Pick Slot</button>
+            <p>Auto-select first open slot from selected venue.</p>
+            <button id="demoPickSlot" class="btn btn-primary">Auto Pick Slot</button>
           </article>
           <article class="demo-card">
             <h3>Step 2</h3>
-            <p>Create a sample booking with one click.</p>
-            <button id="demoCreate" class="btn btn-secondary">Create Sample Booking</button>
+            <p>Create sample booking with realistic student ID.</p>
+            <button id="demoCreate" class="btn btn-primary">Create Sample Booking</button>
           </article>
           <article class="demo-card">
             <h3>Step 3</h3>
-            <p>Cancel the latest booking to show full lifecycle.</p>
+            <p>Cancel latest booking to show full lifecycle completion.</p>
             <button id="demoCancel" class="btn btn-danger">Cancel Latest Booking</button>
           </article>
         </div>
+
         <div class="example-grid">
           <article>
             <h4>Example Request</h4>
@@ -75,29 +186,45 @@
           </article>
           <article>
             <h4>Example Response</h4>
-            <pre id="exampleResult">Run "Create Sample Booking" to see live response.</pre>
+            <pre id="exampleResult">Run "Create Sample Booking" to view live API response.</pre>
           </article>
         </div>
+      </section>
+
+      <section class="panel workflow-panel">
+        <div class="panel-head">
+          <h2>Workflow Illustration</h2>
+          <p class="panel-note">Standard demo narrative for report and oral presentation.</p>
+        </div>
+
+        <img class="workflow-image" src="./assets/operation-flow.svg" alt="Booking workflow illustration" />
+
+        <ol class="workflow-list">
+          <li><strong>Select Venue:</strong> choose the most suitable court by sport and location.</li>
+          <li><strong>Pick Slot:</strong> view daily slot availability and select an open period.</li>
+          <li><strong>Create Booking:</strong> submit booking request with student ID and status.</li>
+          <li><strong>Track or Cancel:</strong> inspect booking details and cancel when schedules change.</li>
+        </ol>
       </section>
 
       <section class="workspace-grid">
         <section class="panel">
           <div class="panel-head">
-            <h2>1) Venues</h2>
-            <button id="refreshVenues" class="btn btn-secondary">Reload Venues</button>
+            <h2>1) Venue Catalog</h2>
+            <button id="refreshVenues" class="btn btn-primary">Reload Venues</button>
           </div>
           <div id="venues" class="card-grid"></div>
         </section>
 
         <section class="panel">
           <div class="panel-head">
-            <h2>2) Slots</h2>
+            <h2>2) Slot Inventory</h2>
             <label class="inline-label">
               Date
               <input type="date" id="slotDate" />
             </label>
           </div>
-          <p id="selectedVenueText" class="hint">Select a venue card to view slots.</p>
+          <p id="selectedVenueText" class="hint">Select a venue card to load slot data.</p>
           <div id="slots" class="card-grid"></div>
         </section>
 
@@ -111,7 +238,7 @@
               </label>
               <label>
                 Slot ID
-                <input id="slotId" placeholder="Use Auto Pick Slot or choose from list" required />
+                <input id="slotId" placeholder="Use Auto Pick Slot or click a slot card" required />
               </label>
               <label>
                 Status
@@ -120,7 +247,7 @@
                   <option value="CONFIRMED">CONFIRMED</option>
                 </select>
               </label>
-              <button type="submit" class="btn btn-highlight">Create Booking</button>
+              <button type="submit" class="btn btn-accent">Create Booking</button>
             </form>
           </div>
 
@@ -131,7 +258,7 @@
                 Booking ID
                 <input id="bookingIdLookup" placeholder="Paste booking UUID" required />
               </label>
-              <button type="submit" class="btn btn-secondary">Get Booking</button>
+              <button type="submit" class="btn btn-primary">Get Booking</button>
             </form>
 
             <form id="cancelBookingForm" class="form-grid compact-form">
@@ -150,7 +277,7 @@
 
         <section class="panel">
           <div class="panel-head">
-            <h2>Live Result</h2>
+            <h2>Live API Result</h2>
             <span id="resultLabel" class="result-label">No action yet</span>
           </div>
           <pre id="result">Ready.</pre>

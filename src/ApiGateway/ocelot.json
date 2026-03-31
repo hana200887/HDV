@@ -1,0 +1,49 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/auth/{everything}",
+      "UpstreamPathTemplate": "/api/auth/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "ServiceName": "auth-service",
+      "UseServiceDiscovery": true
+    },
+    {
+      "DownstreamPathTemplate": "/menu",
+      "UpstreamPathTemplate": "/api/menu",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "ServiceName": "menu-service",
+      "UseServiceDiscovery": true
+    },
+    {
+      "DownstreamPathTemplate": "/menu/{everything}",
+      "UpstreamPathTemplate": "/api/menu/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "ServiceName": "menu-service",
+      "UseServiceDiscovery": true
+    },
+    {
+      "DownstreamPathTemplate": "/orders",
+      "UpstreamPathTemplate": "/api/orders",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "ServiceName": "order-service",
+      "UseServiceDiscovery": true
+    },
+    {
+      "DownstreamPathTemplate": "/orders/{everything}",
+      "UpstreamPathTemplate": "/api/orders/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "ServiceName": "order-service",
+      "UseServiceDiscovery": true
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://apigateway:8080",
+    "ServiceDiscoveryProvider": {
+      "Host": "consul",
+      "Port": 8500,
+      "Type": "Consul",
+      "Scheme": "http",
+      "PollingInterval": 1000
+    }
+  }
+}

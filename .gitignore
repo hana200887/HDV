@@ -1,0 +1,13 @@
+.vs/
+.idea/
+.vscode/
+
+**/bin/
+**/obj/
+
+*.user
+*.suo
+*.swp
+*.tmp
+
+docker-data/
